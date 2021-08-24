@@ -1,6 +1,6 @@
-import { DeepMockProxy } from 'jest-mock-extended/lib/Mock';
-import { DeepPartial } from 'ts-essentials';
-import { Constructor, ConstructorInstance, ConstructorParameters } from 'ts-lib-extended';
+import type { DeepMockProxy } from 'jest-mock-extended/lib/Mock';
+import type { DeepPartial } from 'ts-essentials';
+import type { Constructor, ConstructorInstance, ConstructorParameters } from 'ts-lib-extended';
 
 export type JestClassItLabel<C extends Constructor> = keyof ConstructorInstance<C> | [ keyof ConstructorInstance<C>, string ] | { name: string };
 
@@ -10,7 +10,7 @@ export type MockedConstructorParameters<C extends Constructor>
 export type DeepPartialConstructorParameters<C extends Constructor>
   = DeepPartial<ConstructorParameters<C>>;
 
-export type TestSubject<C extends Constructor> = {
+export type TestInstance<C extends Constructor> = {
   readonly mocks: MockedConstructorParameters<C>,
   readonly instance: ConstructorInstance<C>
 };

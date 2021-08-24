@@ -1,13 +1,13 @@
 import { mockDeep } from 'jest-mock-extended';
-import { Constructor, ConstructorInstance } from 'ts-lib-extended';
-import {
+import type { Constructor, ConstructorInstance } from 'ts-lib-extended';
+import type {
   DeepPartialConstructorParameters,
   JestClassDescribe,
   JestClassIt,
   JestClassItLabel,
   JestClassItOptions,
   MockedConstructorParameters,
-  TestSubject
+  TestInstance
 } from './types';
 
 export class JestClassExtended<C extends Constructor> {
@@ -74,7 +74,7 @@ export class JestClassExtended<C extends Constructor> {
         : label_.toString();
   }
 
-  public prepare(...params_: DeepPartialConstructorParameters<C>): TestSubject<C> {
+  public prepare(...params_: DeepPartialConstructorParameters<C>): TestInstance<C> {
     const mockedParams = this.createMockedParams(...params_);
     return {
       mocks: mockedParams,
