@@ -3,16 +3,15 @@ import type { DeepPartial } from 'ts-essentials';
 import type { Constructor, ConstructorInstance, ConstructorParameters } from 'ts-lib-extended';
 
 export type JestClassItLabel<C extends Constructor> = keyof ConstructorInstance<C> | [ keyof ConstructorInstance<C>, string ] | { name: string };
-export type DeepMockedConstructorParameters<C extends Constructor> = DeepMockProxy<ConstructorParameters<C>>;
-export type MockedConstructorParameters<C extends Constructor> = MockProxy<ConstructorParameters<C>>;
-export type DeepPartialConstructorParameters<C extends Constructor>
-  = DeepPartial<ConstructorParameters<C>>;
-export type JestClassDeepMock<C extends Constructor> = {
-  readonly params: DeepMockedConstructorParameters<C>,
+export type DeepMockConstructorParameters<C extends Constructor> = DeepMockProxy<ConstructorParameters<C>>;
+export type MockConstructorParameters<C extends Constructor> = MockProxy<ConstructorParameters<C>>;
+export type ConstructorParametersMockImplementation<C extends Constructor> = DeepPartial<ConstructorParameters<C>>;
+export type JestClassMockDeep<C extends Constructor> = {
+  readonly params: DeepMockConstructorParameters<C>,
   readonly instance: ConstructorInstance<C>
 };
 export type JestClassMock<C extends Constructor> = {
-  readonly params: MockedConstructorParameters<C>,
+  readonly params: MockConstructorParameters<C>,
   readonly instance: ConstructorInstance<C>
 };
 export type JestClassItOptions = {
