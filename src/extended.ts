@@ -1,51 +1,69 @@
 import { mockDeep } from 'jest-mock-extended';
 import { Constructor, ConstructorInstance } from 'ts-lib-extended';
-import { DeepPartialConstructorParameters, MockedConstructorParameters, TestLabel, TestSubject } from './types';
-
-interface CheckOptionsInterface {
-  readonly timeout?: number;
-}
+import { DeepPartialConstructorParameters, JestClassDescribe, JestClassIt, JestClassItLabel, JestClassItOptions, MockedConstructorParameters, TestSubject } from './types';
 
 export class JestClassExtended<C extends Constructor<ConstructorInstance<C>>> {
   constructor(
     private _constructor: C
   ) {}
 
-  public describe(callback_: jest.EmptyFunction): void {
-    describe(this._constructor.name, () => {
-      callback_();
-    });
+  public readonly describe: JestClassDescribe<C> = (...params_): void => this.classDescribe(describe, ...params_);
+  public readonly fdescribe: JestClassDescribe<C> = (...params_): void => this.classDescribe(fdescribe, ...params_);
+  public readonly xdescribe: JestClassDescribe<C> = (...params_): void => this.classDescribe(xdescribe, ...params_);
+
+  private classDescribe(
+    jestDescribe_: jest.Describe,
+    callback_: jest.EmptyFunction,
+    name_: string = this._constructor.name
+  ): void {
+    jestDescribe_(
+      name_,
+      () => {
+        callback_();
+      }
+    );
   }
 
-  public test(
-    title_: TestLabel<ConstructorInstance<C>>,
-    expectedAssertions_: number,
+  public readonly it: JestClassIt<C> = (...params_): void => this.classIt(it,  ...params_);
+  public readonly fit: JestClassIt<C> = (...params_): void => this.classIt(fit, ...params_);
+  public readonly xit: JestClassIt<C> = (...params_): void => this.classIt(xit, ...params_);
+  public readonly test: JestClassIt<C> = (...params_): void => this.classIt(test, ...params_);
+  public readonly xtest: JestClassIt<C> = (...params_): void => this.classIt(xtest, ...params_);
+
+  private classIt(
+    jestIt_: jest.It,
+    label_: JestClassItLabel<ConstructorInstance<C>>,
+    assertions_: number,
     callback_: jest.ProvidesCallback,
-    options_?: CheckOptionsInterface
+    options_?: JestClassItOptions
   ): void {
     let assertionCallback: jest.ProvidesCallback;
 
     if (callback_.length === 0) {
       assertionCallback = async () => {
-        expect.assertions(expectedAssertions_);
+        expect.assertions(assertions_);
         await (callback_ as () => Promise<unknown>)();
       };
     } else {
       assertionCallback = done_ => {
-        expect.assertions(expectedAssertions_);
+        expect.assertions(assertions_);
         (callback_ as (cb: jest.DoneCallback) => void | undefined)(done_);
       };
     }
 
-    test(
-      Array.isArray(title_)
-        ? title_.join(': ')
-        : typeof title_ === 'object'
-          ? title_.custom
-          : title_.toString(),
+    jestIt_(
+      this.classItName(label_),
       assertionCallback,
       options_?.timeout
     );
+  }
+
+  private classItName(label_: JestClassItLabel<ConstructorInstance<C>>): string {
+    return Array.isArray(label_)
+      ? label_.join(': ')
+      : typeof label_ === 'object'
+        ? label_.name
+        : label_.toString();
   }
 
   public prepare(...params_: DeepPartialConstructorParameters<C>): TestSubject<C> {

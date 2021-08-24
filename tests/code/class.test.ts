@@ -1,39 +1,45 @@
-import { mock } from 'jest-mock-extended';
 import { JestClassExtended } from '../../src/extended';
 import { FakeMe } from './fake';
 
 describe(JestClassExtended.name, () => {
   test('describe', () => {
-    expect.assertions(3);
+    expect.assertions(4);
     const jce = new JestClassExtended(FakeMe);
     const jestDescribeMock = jest.spyOn(global, 'describe');
+    const jestXDescribeMock = jest.spyOn(global, 'xdescribe');
+    const jestFDescribeMock = jest.spyOn(global, 'fdescribe');
 
-    jestDescribeMock.mockImplementation(
-      ({}, callback_) => {
-        // simulate invoking callback by jest
-        callback_();
-      }
-    );
+    jestDescribeMock.mockImplementation(({}, callback_) => { callback_(); });
+    jestXDescribeMock.mockImplementation(({}, callback_) => { callback_(); });
+    jestFDescribeMock.mockImplementation(({}, callback_) => { callback_(); });
 
-    expect(jestDescribeMock).not.toBeCalled();
-    let called = false;
-    jce.describe(() => { called = true; });
-    expect(called).toBe(true);
+    let called = 0;
+    jce.describe(() => { called++; });
+    jce.xdescribe(() => { called++; });
+    jce.fdescribe(() => { called++; });
+
+    expect(called).toBe(3);
     expect(jestDescribeMock).toBeCalledWith(FakeMe.name, expect.anything());
+    expect(jestXDescribeMock).toBeCalledWith(FakeMe.name, expect.anything());
+    expect(jestFDescribeMock).toBeCalledWith(FakeMe.name, expect.anything());
   });
 
-  test('test', () => {
-    expect.assertions(18);
+  test('it', () => {
+    expect.assertions(31);
     const jce = new JestClassExtended(FakeMe);
+    const jestItMock = jest.spyOn(global, 'it');
+    const jestFItMock = jest.spyOn(global, 'fit');
+    const jestXItMock = jest.spyOn(global, 'xit');
     const jestTestMock = jest.spyOn(global, 'test');
+    const jestXTestMock = jest.spyOn(global, 'xtest');
     const testCallbackMock = jest.fn();
+    const doneMock: jest.DoneCallback = Object.assign(jest.fn(), {fail: jest.fn()});
 
-    jestTestMock.mockImplementation(
-      ({}, callback_) => {
-        // simulate invoking callback by jest
-        callback_?.(mock<jest.DoneCallback>());
-      }
-    );
+    jestItMock.mockImplementation(({}, callback_) => { callback_?.(doneMock); });
+    jestFItMock.mockImplementation(({}, callback_) => { callback_?.(doneMock); });
+    jestXItMock.mockImplementation(({}, callback_) => { callback_?.(doneMock); });
+    jestTestMock.mockImplementation(({}, callback_) => { callback_?.(doneMock); });
+    jestXTestMock.mockImplementation(({}, callback_) => { callback_?.(doneMock); });
 
     const assertionsMock = jest.spyOn(expect, 'assertions');
     assertionsMock.mockImplementation();
@@ -49,7 +55,7 @@ describe(JestClassExtended.name, () => {
     expect(testCallbackMock).toBeCalledTimes(2);
     expect(assertionsMock).toBeCalledTimes(2);
     expect(jestTestMock).toBeCalledTimes(2);
-    jce.test({ custom: 'otherthing' }, 1, testCallbackMock, {});
+    jce.test({ name: 'otherthing' }, 1, testCallbackMock, {});
     expect(testCallbackMock).toBeCalledTimes(3);
     expect(assertionsMock).toBeCalledTimes(3);
     expect(jestTestMock).toBeCalledTimes(3);
@@ -61,6 +67,29 @@ describe(JestClassExtended.name, () => {
     expect(assertionsMock).nthCalledWith(1, 3);
     expect(assertionsMock).nthCalledWith(2, 2);
     expect(assertionsMock).nthCalledWith(3, 1);
+
+    jce.it(['something', 'addition1'], 7, testCallbackMock);
+    jce.xit(['something', 'addition2'], 6, testCallbackMock);
+    jce.fit(['something', 'addition3'], 5, testCallbackMock);
+    jce.xtest(['something', 'addition4'], 4, testCallbackMock);
+
+    expect(testCallbackMock).toBeCalledTimes(7);
+    expect(assertionsMock).toBeCalledTimes(7);
+
+    expect(jestItMock).toBeCalledWith('something: addition1', expect.anything(), undefined);
+    expect(jestXItMock).toBeCalledWith('something: addition2', expect.anything(), undefined);
+    expect(jestFItMock).toBeCalledWith('something: addition3', expect.anything(), undefined);
+    expect(jestXTestMock).toBeCalledWith('something: addition4', expect.anything(), undefined);
+
+    expect(assertionsMock).nthCalledWith(4, 7);
+    expect(assertionsMock).nthCalledWith(5, 6);
+    expect(assertionsMock).nthCalledWith(6, 5);
+    expect(assertionsMock).nthCalledWith(7, 4);
+
+    expect(doneMock).not.toBeCalled();
+    jce.test('doSomething', 8, done_ => { done_(); });
+    expect(assertionsMock).nthCalledWith(8, 8);
+    expect(doneMock).toBeCalled();
   });
 
   // test('prepare', () => {
