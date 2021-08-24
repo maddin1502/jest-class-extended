@@ -5,7 +5,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "parserOptions": {
-    "project": "tsconfig.json",
+    "project": ["tsconfig.json", "tests/tsconfig.json"],
     "sourceType": "module"
   },
   "plugins": [
@@ -17,6 +17,9 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "warn",
     "@typescript-eslint/prefer-for-of": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
     "indent": ["warn", 2],
     "no-bitwise": "off",
     "no-console": "warn",
@@ -24,5 +27,6 @@
     "no-param-reassign": "warn",
     "quotes": ["warn", "single"],
     "semi": "warn"
-  }
+  },
+  "ignorePatterns": ["dist", "tests/reports"]
 }
