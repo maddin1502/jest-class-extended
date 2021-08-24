@@ -7,9 +7,9 @@ export class JestClassExtended<C extends Constructor<ConstructorInstance<C>>> {
     private _constructor: C
   ) {}
 
-  public readonly describe: JestClassDescribe<C> = (...params_): void => this.classDescribe(describe, ...params_);
-  public readonly fdescribe: JestClassDescribe<C> = (...params_): void => this.classDescribe(fdescribe, ...params_);
-  public readonly xdescribe: JestClassDescribe<C> = (...params_): void => this.classDescribe(xdescribe, ...params_);
+  public readonly describe: JestClassDescribe = (...params_): void => this.classDescribe(describe, ...params_);
+  public readonly fdescribe: JestClassDescribe = (...params_): void => this.classDescribe(fdescribe, ...params_);
+  public readonly xdescribe: JestClassDescribe = (...params_): void => this.classDescribe(xdescribe, ...params_);
 
   private classDescribe(
     jestDescribe_: jest.Describe,
