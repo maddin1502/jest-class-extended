@@ -97,20 +97,20 @@ describe(JestClassExtended.name, () => {
   test('prepare', () => {
     expect.assertions(14);
     const jceFDM = new JestClassExtended(FakeDepMe);
-    const preparedDepMe = jceFDM.prepare({ some: 'value'});
+    const preparedDepMe = jceFDM.deepMock({ some: 'value'});
     expect(preparedDepMe.mocks.length).toBe(2);
     expect(preparedDepMe.mocks[0].some).toBe('value');
     expect(preparedDepMe.instance._dep.some).toBe('value');
 
     const jceFMM = new JestClassExtended(FakeMultiMe);
-    const preparedMultiMe = jceFMM.prepare('nice', 42);
+    const preparedMultiMe = jceFMM.deepMock('nice', 42);
     expect(preparedMultiMe.mocks.length).toBe(4);
     expect(preparedMultiMe.mocks[0]).toBe('nice');
     expect(preparedMultiMe.mocks[1]).toBe(42);
     expect(preparedMultiMe.instance.one).toBe('nice');
     expect(preparedMultiMe.instance.two).toBe(42);
 
-    const preparedMultiMe2 = jceFMM.prepare(undefined, 42, undefined, () => 'nonsense');
+    const preparedMultiMe2 = jceFMM.deepMock(undefined, 42, undefined, () => 'nonsense');
     expect(preparedMultiMe2.mocks.length).toBe(4);
     expect(preparedMultiMe2.mocks[0]).toBeDefined();
     expect(preparedMultiMe2.mocks[1]).toBe(42);
@@ -119,13 +119,24 @@ describe(JestClassExtended.name, () => {
     expect(preparedMultiMe2.instance.two).toBe(42);
   });
 
-  test('create', () => {
+  test('deepMockedInstance', () => {
     expect.assertions(4);
-    const instance = new JestClassExtended(FakeDepMe).create();
+    const instance = new JestClassExtended(FakeDepMe).deepMock().instance;
     expect(instance._dep).toBeDefined();
     expect(instance._dep.some).toBeDefined();
 
-    const instance2 = new JestClassExtended(FakeMultiMe).create();
+    const instance2 = new JestClassExtended(FakeMultiMe).deepMock().instance;
+    expect(instance2.callme).toBeDefined();
+    expect(instance2.one).toBeDefined();
+  });
+
+  test('mockedInstance', () => {
+    expect.assertions(4);
+    const instance = new JestClassExtended(FakeDepMe).mock().instance;
+    expect(instance._dep).toBeDefined();
+    expect(instance._dep.some).toBeDefined();
+
+    const instance2 = new JestClassExtended(FakeMultiMe).mock().instance;
     expect(instance2.callme).toBeDefined();
     expect(instance2.one).toBeDefined();
   });
