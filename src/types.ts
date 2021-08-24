@@ -26,7 +26,7 @@ export type JestClassIt<C extends Constructor> = (
   options_?: JestClassItOptions
 ) => void;
 
-export  type JestClassDescribe = (
+export type JestClassDescribe = (
   callback_: jest.EmptyFunction,
   name_?: string
 ) => void;

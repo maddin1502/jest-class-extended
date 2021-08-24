@@ -1,8 +1,16 @@
 import { mockDeep } from 'jest-mock-extended';
 import { Constructor, ConstructorInstance } from 'ts-lib-extended';
-import { DeepPartialConstructorParameters, JestClassDescribe, JestClassIt, JestClassItLabel, JestClassItOptions, MockedConstructorParameters, TestSubject } from './types';
+import {
+  DeepPartialConstructorParameters,
+  JestClassDescribe,
+  JestClassIt,
+  JestClassItLabel,
+  JestClassItOptions,
+  MockedConstructorParameters,
+  TestSubject
+} from './types';
 
-export class JestClassExtended<C extends Constructor<ConstructorInstance<C>>> {
+export class JestClassExtended<C extends Constructor> {
   constructor(
     private _constructor: C
   ) {}
