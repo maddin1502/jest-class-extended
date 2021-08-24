@@ -78,7 +78,7 @@ export class JestClassExtended<C extends Constructor> {
   public mock(...params_: DeepPartialConstructorParameters<C>): JestClassDeepMock<C> {
     const mockedParams = this.mockParams(...params_);
     return {
-      mocks: mockedParams,
+      params: mockedParams,
       instance: this.createInstance(mockedParams)
     };
   }
@@ -96,7 +96,7 @@ export class JestClassExtended<C extends Constructor> {
   public deepMock(...params_: DeepPartialConstructorParameters<C>): JestClassDeepMock<C> {
     const mockedParams = this.deepMockParams(...params_);
     return {
-      mocks: mockedParams,
+      params: mockedParams,
       instance: this.createInstance(mockedParams)
     };
   }
