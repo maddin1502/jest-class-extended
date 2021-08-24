@@ -85,7 +85,12 @@ export class JestClassExtended<C extends Constructor<ConstructorInstance<C>>> {
       params.push(undefined);
     }
 
-    return params.map(param_ => mockDeep(param_)) as MockedConstructorParameters<C>;
+    return params.map(param_ => this.mockable(param_) ? mockDeep(param_) : param_) as MockedConstructorParameters<C>;
+  }
+
+  private mockable(value_: any): boolean {
+    const valueType = typeof value_;
+    return valueType === 'object' || valueType === 'function' || valueType === 'undefined';
   }
 
   private createInstance(mockedParams_: MockedConstructorParameters<C>): ConstructorInstance<C> {

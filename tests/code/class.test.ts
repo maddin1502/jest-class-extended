@@ -1,5 +1,7 @@
 import { JestClassExtended } from '../../src/extended';
 import { FakeMe } from './fake';
+import { FakeDepMe } from './fakeDep';
+import { FakeMultiMe } from './fakeMulti';
 
 describe(JestClassExtended.name, () => {
   test('describe', () => {
@@ -92,39 +94,39 @@ describe(JestClassExtended.name, () => {
     expect(doneMock).toBeCalled();
   });
 
-  // test('prepare', () => {
-  //   expect.assertions(14);
-  //   const cfw = createClassTestFramework();
-  //   const preparedDepMe = cfw.prepare(FakeDepMe, { some: 'value'});
-  //   expect(preparedDepMe.mocks.length).toBe(2);
-  //   expect(preparedDepMe.mocks[0].some).toBe('value');
-  //   expect(preparedDepMe.instance._dep.some).toBe('value');
+  test('prepare', () => {
+    expect.assertions(14);
+    const jceFDM = new JestClassExtended(FakeDepMe);
+    const preparedDepMe = jceFDM.prepare({ some: 'value'});
+    expect(preparedDepMe.mocks.length).toBe(2);
+    expect(preparedDepMe.mocks[0].some).toBe('value');
+    expect(preparedDepMe.instance._dep.some).toBe('value');
 
-  //   const preparedMultiMe = cfw.prepare(FakeMultiMe, 'nice', 42);
-  //   expect(preparedMultiMe.mocks.length).toBe(4);
-  //   expect(preparedMultiMe.mocks[0]).toBe('nice');
-  //   expect(preparedMultiMe.mocks[1]).toBe(42);
-  //   expect(preparedMultiMe.instance.one).toBe('nice');
-  //   expect(preparedMultiMe.instance.two).toBe(42);
+    const jceFMM = new JestClassExtended(FakeMultiMe);
+    const preparedMultiMe = jceFMM.prepare('nice', 42);
+    expect(preparedMultiMe.mocks.length).toBe(4);
+    expect(preparedMultiMe.mocks[0]).toBe('nice');
+    expect(preparedMultiMe.mocks[1]).toBe(42);
+    expect(preparedMultiMe.instance.one).toBe('nice');
+    expect(preparedMultiMe.instance.two).toBe(42);
 
-  //   const preparedMultiMe2 = cfw.prepare(FakeMultiMe, undefined, 42, undefined, () => 'nonsense');
-  //   expect(preparedMultiMe2.mocks.length).toBe(4);
-  //   expect(preparedMultiMe2.mocks[0]).toBeDefined();
-  //   expect(preparedMultiMe2.mocks[1]).toBe(42);
-  //   expect(preparedMultiMe2.mocks[2]).toBeDefined();
-  //   expect(preparedMultiMe2.mocks[3]()).toBe('nonsense');
-  //   expect(preparedMultiMe2.instance.two).toBe(42);
-  // });
+    const preparedMultiMe2 = jceFMM.prepare(undefined, 42, undefined, () => 'nonsense');
+    expect(preparedMultiMe2.mocks.length).toBe(4);
+    expect(preparedMultiMe2.mocks[0]).toBeDefined();
+    expect(preparedMultiMe2.mocks[1]).toBe(42);
+    expect(preparedMultiMe2.mocks[2]).toBeDefined();
+    expect(preparedMultiMe2.mocks[3]()).toBe('nonsense');
+    expect(preparedMultiMe2.instance.two).toBe(42);
+  });
 
-  // test('create', () => {
-  //   expect.assertions(4);
-  //   const cfw = createClassTestFramework();
-  //   const instance = cfw.create(FakeDepMe);
-  //   expect(instance._dep).toBeDefined();
-  //   expect(instance._dep.some).toBeDefined();
+  test('create', () => {
+    expect.assertions(4);
+    const instance = new JestClassExtended(FakeDepMe).create();
+    expect(instance._dep).toBeDefined();
+    expect(instance._dep.some).toBeDefined();
 
-  //   const instance2 = cfw.create(FakeMultiMe);
-  //   expect(instance2.callme).toBeDefined();
-  //   expect(instance2.one).toBeDefined();
-  // });
+    const instance2 = new JestClassExtended(FakeMultiMe).create();
+    expect(instance2.callme).toBeDefined();
+    expect(instance2.one).toBeDefined();
+  });
 });
