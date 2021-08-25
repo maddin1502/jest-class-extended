@@ -78,8 +78,10 @@ export class JestClassExtended<C extends Constructor> {
 
   public mock(...params_: ConstructorParametersMockImplementation<C>): JestClassMock<C> {
     this.fillUpMockImplementation(params_);
+    const mockedParams = params_.map(
+      param_ => this.mockable(param_) ? mock(param_) : param_
+    ) as MockConstructorParameters<C>;
 
-    const mockedParams = params_.map(param_ => this.mockable(param_) ? mock(param_) : param_) as MockConstructorParameters<C>;
     return {
       params: mockedParams,
       instance: this.createInstance(mockedParams)
@@ -88,8 +90,10 @@ export class JestClassExtended<C extends Constructor> {
 
   public mockDeep(...params_: ConstructorParametersMockImplementation<C>): JestClassMockDeep<C> {
     this.fillUpMockImplementation(params_);
+    const mockedParams = params_.map(
+      param_ => this.mockable(param_) ? mockDeep(param_) : param_
+    ) as DeepMockConstructorParameters<C>;
 
-    const mockedParams = params_.map(param_ => this.mockable(param_) ? mockDeep(param_) : param_) as DeepMockConstructorParameters<C>;
     return {
       params: mockedParams,
       instance: this.createInstance(mockedParams)
