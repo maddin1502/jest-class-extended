@@ -16,7 +16,7 @@ export type JestClassMock<C extends Constructor> = {
 };
 export type JestClassItOptions = {
   readonly timeout?: number;
-}
+};
 export type JestClassIt<C extends Constructor> = (
   title_: JestClassItLabel<C>,
   assertions_: number,

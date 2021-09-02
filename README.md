@@ -1,5 +1,5 @@
 # jest-class-extended
-> Type safe jest extension for class based code.
+> Type safe jest extension for class based code with auto parameter mocking.
 
 [![npm version](https://badge.fury.io/js/jest-class-extended.svg)](https://badge.fury.io/js/jest-class-extended)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -17,11 +17,11 @@
 
 ## Installation
 ```bash
-npm i jest-class-extended
+npm i jest-class-extended --save-dev
 ```
 or
 ```bash
-yarn add jest-class-extended
+yarn add jest-class-extended --dev
 ```
 
 ## Usage
