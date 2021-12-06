@@ -22,17 +22,19 @@
     "@typescript-eslint/comma-dangle": "warn",
     "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/semi": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/member-delimiter-style": "warn",
+    "indent": "off", // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/indent.md
     "prefer-arrow-callback": "warn",
     "object-shorthand": ["warn", "never"],
     "camelcase": "warn",
-    "indent": "off",
     "no-bitwise": "off",
     "no-console": "warn",
     "no-empty": "warn",
     "no-param-reassign": "warn",
     "quotes": ["warn", "single"],
-    "semi": "off"
+    "semi": "off" // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/semi.md
   },
   "ignorePatterns": ["dist", "tests/reports"]
 }
