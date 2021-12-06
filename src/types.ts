@@ -1,4 +1,4 @@
-import type { DeepMockProxy, MockProxy } from 'jest-mock-extended/lib/Mock';
+import type { DeepMockProxy, MockProxy } from 'jest-mock-extended';
 import type { DeepPartial } from 'ts-essentials';
 import type { Constructor, ConstructorInstance, ConstructorParameters } from 'ts-lib-extended';
 
@@ -7,12 +7,12 @@ export type DeepMockConstructorParameters<C extends Constructor> = DeepMockProxy
 export type MockConstructorParameters<C extends Constructor> = MockProxy<ConstructorParameters<C>>;
 export type ConstructorParametersMockImplementation<C extends Constructor> = DeepPartial<ConstructorParameters<C>>;
 export type JestClassMockDeep<C extends Constructor> = {
-  readonly params: DeepMockConstructorParameters<C>,
-  readonly instance: ConstructorInstance<C>
+  readonly params: DeepMockConstructorParameters<C>;
+  readonly instance: ConstructorInstance<C>;
 };
 export type JestClassMock<C extends Constructor> = {
-  readonly params: MockConstructorParameters<C>,
-  readonly instance: ConstructorInstance<C>
+  readonly params: MockConstructorParameters<C>;
+  readonly instance: ConstructorInstance<C>;
 };
 export type JestClassItOptions = {
   readonly timeout?: number;
